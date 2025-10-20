@@ -3,11 +3,14 @@ FROM eclipse-temurin:17-jdk AS build
 
 WORKDIR /app
 
-# Copy only the Maven wrapper and project files
+# Copy Maven wrapper & project files
 COPY ./mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src ./src
+
+# Make Maven wrapper executable
+RUN chmod +x ./mvnw
 
 # Build the Spring Boot application
 RUN ./mvnw clean package -DskipTests
@@ -18,7 +21,6 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy the built JAR from the build stage dynamically
-# This uses a wildcard so it works even if the version changes
 COPY --from=build /app/target/*.jar ./app.jar
 
 # Expose Render port
