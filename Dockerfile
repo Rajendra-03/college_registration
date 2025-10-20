@@ -13,7 +13,8 @@ COPY src ./src
 RUN chmod +x ./mvnw
 
 # Build the Spring Boot app
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package -DskipTests -U
+
 
 # Stage 2: Run
 FROM eclipse-temurin:17-jdk
