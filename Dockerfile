@@ -14,7 +14,7 @@ RUN ./mvnw dependency:resolve
 # Copy the source code
 COPY src ./src
 
-# Build the Spring Boot JAR
+# Build the Spring Boot WAR
 RUN ./mvnw clean package -DskipTests -U
 
 # Stage 2: Run
@@ -22,11 +22,11 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copy JAR from build stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy WAR from build stage
+COPY --from=build /app/target/*.war app.war
 
 # Expose port (Render will use $PORT)
 EXPOSE 10000
 
-# Run the Spring Boot app
-CMD ["sh", "-c", "java -jar app.jar --server.port=$PORT"]
+# Run the Spring Boot WAR
+CMD ["sh", "-c", "java -jar app.war --server.port=$PORT"]
